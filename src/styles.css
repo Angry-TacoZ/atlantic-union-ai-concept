@@ -1,7 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap');
-
 :root {
-  font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  font-family: 'Segoe UI', ui-sans-serif, system-ui, sans-serif;
   color: #16232b;
   background: #ebe5db;
   font-synthesis: none;
@@ -53,7 +51,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, summary:focus-visibl
 .hero-copy { max-width: 700px; }
 .eyebrow { display: block; color: var(--green); text-transform: uppercase; letter-spacing: .13em; font-size: .72rem; font-weight: 800; margin-bottom: 16px; }
 .eyebrow--light { color: var(--green-light); }
-.hero h1 { font-family: 'Newsreader', Georgia, serif; font-size: clamp(4rem, 7vw, 7.5rem); font-weight: 500; letter-spacing: -.055em; line-height: .85; margin: 0 0 28px; max-width: 800px; }
+.hero h1 { font-family: Georgia, 'Times New Roman', serif; font-size: clamp(4rem, 7vw, 7.5rem); font-weight: 500; letter-spacing: -.055em; line-height: .85; margin: 0 0 28px; max-width: 800px; }
 .hero h1 em { display: block; color: var(--green-light); font-style: normal; }
 .hero-copy > p { max-width: 540px; font-size: clamp(1rem, 1.25vw, 1.2rem); line-height: 1.65; color: rgba(255,255,255,.78); margin: 0 0 34px; }
 .primary-button { min-height: 48px; border: 0; background: var(--green); color: white; padding: 0 20px; display: inline-flex; gap: 10px; align-items: center; justify-content: center; font-weight: 800; }
@@ -63,7 +61,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, summary:focus-visibl
 .guide-heading { display: flex; justify-content: space-between; align-items: center; gap: 20px; }
 .guide-heading > span { display: flex; gap: 8px; align-items: center; color: var(--green); text-transform: uppercase; letter-spacing: .1em; font-size: .72rem; font-weight: 800; }
 .context-button { display: inline-flex; align-items: center; gap: 6px; border: 0; background: transparent; font-size: .76rem; font-weight: 700; color: #435057; }
-.guide h2 { font-family: 'Newsreader', Georgia, serif; font-size: clamp(2rem, 3vw, 3.4rem); letter-spacing: -.035em; line-height: .96; margin: 30px 0 12px; }
+.guide h2 { font-family: Georgia, 'Times New Roman', serif; font-size: clamp(2rem, 3vw, 3.4rem); letter-spacing: -.035em; line-height: .96; margin: 30px 0 12px; }
 .guide-intro { color: #59666d; line-height: 1.55; margin: 0 0 22px; }
 .guide-form { height: 62px; display: flex; border-bottom: 2px solid var(--navy); background: white; }
 .guide-form input { flex: 1; min-width: 0; border: 0; padding: 0 18px; background: transparent; }
@@ -79,7 +77,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, summary:focus-visibl
 
 .guide-answer { max-width: 1440px; margin: 0 auto; padding: 46px 5vw; display: grid; grid-template-columns: 56px minmax(0, 1.7fr) minmax(300px, .8fr); gap: clamp(24px, 4vw, 64px); align-items: start; background: var(--paper); border-bottom: 1px solid var(--line); }
 .answer-mark { width: 52px; height: 52px; background: var(--green); color: white; display: grid; place-items: center; }
-.answer-copy h2 { font-family: 'Newsreader', Georgia, serif; font-size: clamp(2rem, 3.2vw, 3.5rem); line-height: 1; letter-spacing: -.04em; margin: 0 0 15px; }
+.answer-copy h2 { font-family: Georgia, 'Times New Roman', serif; font-size: clamp(2rem, 3.2vw, 3.5rem); line-height: 1; letter-spacing: -.04em; margin: 0 0 15px; }
 .answer-copy p { max-width: 760px; color: #526067; line-height: 1.65; }
 .text-link { display: inline-flex; align-items: center; gap: 8px; color: var(--green); font-weight: 800; border-bottom: 1px solid currentColor; padding-bottom: 3px; }
 .evidence { border-left: 1px solid var(--line); padding-left: 28px; }
@@ -91,7 +89,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, summary:focus-visibl
 
 .products, .insights { padding: 110px 5vw; max-width: 1540px; margin: 0 auto; }
 .section-heading { display: grid; grid-template-columns: 1.2fr .75fr; gap: 7vw; align-items: end; margin-bottom: 52px; }
-.section-heading h2 { font-family: 'Newsreader', Georgia, serif; font-size: clamp(3rem, 5vw, 5.4rem); letter-spacing: -.055em; line-height: .92; margin: 0; }
+.section-heading h2 { font-family: Georgia, 'Times New Roman', serif; font-size: clamp(3rem, 5vw, 5.4rem); letter-spacing: -.055em; line-height: .92; margin: 0; }
 .section-heading > p { line-height: 1.65; color: #5a666c; margin: 0; max-width: 490px; }
 .product-list { border-top: 1px solid var(--line); }
 .product-row { width: 100%; min-height: 112px; padding: 18px 0; display: grid; grid-template-columns: 54px 50px minmax(240px, .8fr) minmax(280px, 1.2fr) 34px; gap: 22px; align-items: center; text-align: left; border: 0; border-bottom: 1px solid var(--line); background: transparent; transition: padding .2s, background .2s; }
@@ -99,7 +97,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, summary:focus-visibl
 .product-index { color: #829097; font-size: .72rem; }
 .product-icon { color: var(--green); }
 .product-name { display: grid; gap: 5px; }
-.product-name strong { font-family: 'Newsreader', Georgia, serif; font-size: 1.55rem; }
+.product-name strong { font-family: Georgia, 'Times New Roman', serif; font-size: 1.55rem; }
 .product-name small { color: #647078; }
 .product-cue { color: #506068; line-height: 1.45; font-size: .88rem; }
 .product-arrow { justify-self: end; }
@@ -107,14 +105,14 @@ button:focus-visible, a:focus-visible, input:focus-visible, summary:focus-visibl
 
 .compare { background: var(--navy); color: white; padding: 110px 5vw; }
 .compare-heading { max-width: 950px; margin-bottom: 64px; }
-.compare-heading h2 { font-family: 'Newsreader', Georgia, serif; font-size: clamp(3.4rem, 6vw, 6.8rem); line-height: .9; letter-spacing: -.055em; margin: 0 0 24px; }
+.compare-heading h2 { font-family: Georgia, 'Times New Roman', serif; font-size: clamp(3.4rem, 6vw, 6.8rem); line-height: .9; letter-spacing: -.055em; margin: 0 0 24px; }
 .compare-heading p { color: rgba(255,255,255,.65); max-width: 650px; line-height: 1.6; }
 .compare-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid rgba(255,255,255,.2); max-width: 1540px; margin: 0 auto; }
 .compare-grid article { padding: 34px clamp(22px, 3vw, 48px) 18px 0; margin-right: clamp(22px, 3vw, 48px); border-right: 1px solid rgba(255,255,255,.2); display: flex; flex-direction: column; min-height: 430px; }
 .compare-grid article:last-child { border-right: 0; }
 .compare-number { color: var(--green-light); font-size: .75rem; }
 .compare-label { margin-top: 42px; color: rgba(255,255,255,.58); text-transform: uppercase; letter-spacing: .12em; font-size: .7rem; }
-.compare-grid h3 { font-family: 'Newsreader', Georgia, serif; font-size: 2.6rem; margin: 10px 0 16px; }
+.compare-grid h3 { font-family: Georgia, 'Times New Roman', serif; font-size: 2.6rem; margin: 10px 0 16px; }
 .compare-grid article > p { color: rgba(255,255,255,.7); line-height: 1.6; }
 .compare-grid article > div { margin-top: auto; display: grid; gap: 6px; border-top: 1px solid rgba(255,255,255,.2); padding-top: 18px; }
 .compare-grid article > div strong { color: var(--green-light); font-size: .7rem; text-transform: uppercase; letter-spacing: .1em; }
@@ -127,21 +125,21 @@ button:focus-visible, a:focus-visible, input:focus-visible, summary:focus-visibl
 .story-media img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s ease; }
 .story:hover img { transform: scale(1.025); }
 .story-copy { padding: clamp(60px, 8vw, 130px); display: flex; flex-direction: column; justify-content: center; }
-.story-copy h2 { font-family: 'Newsreader', Georgia, serif; font-size: clamp(3rem, 5vw, 5.6rem); letter-spacing: -.055em; line-height: .92; margin: 0 0 28px; }
+.story-copy h2 { font-family: Georgia, 'Times New Roman', serif; font-size: clamp(3rem, 5vw, 5.6rem); letter-spacing: -.055em; line-height: .92; margin: 0 0 28px; }
 .story-copy p { color: #56636a; line-height: 1.7; max-width: 680px; }
 .story-copy .text-link { align-self: flex-start; margin-top: 22px; }
 
 .article-list { border-top: 1px solid var(--line); }
 .article-list a { display: grid; grid-template-columns: 260px 1fr 32px; gap: 28px; align-items: center; padding: 28px 0; border-bottom: 1px solid var(--line); }
 .article-list a span { color: var(--green); text-transform: uppercase; font-size: .69rem; letter-spacing: .09em; font-weight: 800; }
-.article-list a strong { font-family: 'Newsreader', Georgia, serif; font-size: clamp(1.4rem, 2.4vw, 2.25rem); }
+.article-list a strong { font-family: Georgia, 'Times New Roman', serif; font-size: clamp(1.4rem, 2.4vw, 2.25rem); }
 .article-list a:hover svg { transform: translateX(5px); }
 .article-list svg { transition: transform .2s; }
 
 .appointment { margin: 0 5vw 110px; padding: clamp(38px, 5vw, 72px); background: var(--green); color: white; display: flex; justify-content: space-between; align-items: flex-end; gap: 40px; }
 .appointment > div > svg { margin-bottom: 34px; width: 38px; height: 38px; }
 .appointment .eyebrow { color: white; opacity: 1; }
-.appointment h2 { font-family: 'Newsreader', Georgia, serif; font-size: clamp(2.8rem, 5vw, 5rem); margin: 0 0 10px; letter-spacing: -.05em; }
+.appointment h2 { font-family: Georgia, 'Times New Roman', serif; font-size: clamp(2.8rem, 5vw, 5rem); margin: 0 0 10px; letter-spacing: -.05em; }
 .appointment p { max-width: 650px; color: white; }
 .appointment .primary-button { background: white; color: var(--navy); flex: 0 0 auto; }
 
@@ -158,7 +156,7 @@ footer a, footer p { color: rgba(255,255,255,.65); font-size: .82rem; line-heigh
 .modal-scrim { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: rgba(3,14,24,.74); }
 .modal { width: min(560px, 100%); position: relative; z-index: 1; background: var(--paper); padding: clamp(32px, 5vw, 58px); box-shadow: 0 30px 90px rgba(0,0,0,.35); }
 .modal > svg { color: var(--green); width: 40px; height: 40px; margin-bottom: 28px; }
-.modal h2 { font-family: 'Newsreader', Georgia, serif; font-size: clamp(2.4rem, 5vw, 4rem); line-height: .95; letter-spacing: -.04em; margin: 0 0 20px; }
+.modal h2 { font-family: Georgia, 'Times New Roman', serif; font-size: clamp(2.4rem, 5vw, 4rem); line-height: .95; letter-spacing: -.04em; margin: 0 0 20px; }
 .modal p, .modal li { color: #56636a; line-height: 1.6; }
 .modal .primary-button { margin-top: 16px; }
 .modal-close { position: absolute; right: 18px; top: 18px; width: 42px; height: 42px; border: 1px solid var(--line); background: transparent; display: grid; place-items: center; }
