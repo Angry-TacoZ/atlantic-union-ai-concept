@@ -2,6 +2,8 @@
 
 An independent, working front-end concept that keeps Atlantic Union Bank’s recognizable homepage content while applying the interaction principles explored in the Best Buy Blue concept: ambient guidance, visible context, evidence expansion, and an explicit human decision.
 
+**[Open the live concept demo](https://angry-tacoz.github.io/atlantic-union-ai-concept/)**
+
 This project is not affiliated with, endorsed by, or connected to Atlantic Union Bank. Atlantic Union Bank copy, logo, and the source-site photograph included for this local design study belong to their respective owner.
 
 ## Product thesis
@@ -30,6 +32,8 @@ npm.cmd run dev -- --host 127.0.0.1 --port 4173
 npm.cmd run verify
 npm.cmd run test:e2e
 ```
+
+Pull requests run the same verification and browser suite in GitHub Actions. Pushes to `main` repeat those checks before publishing the exact `dist` artifact to GitHub Pages.
 
 ## Declared operating scope
 
