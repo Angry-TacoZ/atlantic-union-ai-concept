@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "scope": "public-low-risk",
+  "secret_scan": true,
+  "checks": [
+    { "name": "ESLint", "command": "npm.cmd", "arguments": ["run", "lint"], "timeout_seconds": 300, "required": true },
+    { "name": "TypeScript", "command": "npm.cmd", "arguments": ["run", "typecheck"], "timeout_seconds": 300, "required": true },
+    { "name": "Unit tests", "command": "npm.cmd", "arguments": ["run", "test", "--", "--reporter=json"], "timeout_seconds": 300, "required": true },
+    { "name": "Production build", "command": "npm.cmd", "arguments": ["run", "build", "--", "--logLevel", "error"], "timeout_seconds": 300, "required": true }
+  ]
+}
