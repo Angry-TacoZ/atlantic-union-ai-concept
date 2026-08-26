@@ -6,9 +6,8 @@ import {
   Building2,
   CalendarDays,
   Check,
-  ChevronDown,
   CircleDollarSign,
-  Eye,
+  Brain,
   House,
   Landmark,
   Menu,
@@ -20,7 +19,11 @@ import {
   UserRound,
   X,
 } from 'lucide-react'
-import { FormEvent, useEffect, useMemo, useRef, useState } from 'react'
+import { FormEvent, MouseEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { AmbientGuide } from './components/AmbientGuide'
+import { MemoryPanel } from './components/MemoryPanel'
+import { clearCustomerMemory, loadCustomerMemory, restoreCustomerMemory, saveCustomerMemory } from './lib/memory'
+import type { AgentCue } from './types'
 
 type GoalKey = 'routing' | 'checking' | 'saving' | 'home'
 
@@ -150,28 +153,30 @@ function App() {
   const [answerKey, setAnswerKey] = useState<GoalKey>('checking')
   const [query, setQuery] = useState('')
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null)
-  const [contextOpen, setContextOpen] = useState(false)
+  const [memoryOpen, setMemoryOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [modal, setModal] = useState<'login' | 'appointment' | null>(null)
-  const [priorities, setPriorities] = useState(() => {
-    try {
-      const stored = localStorage.getItem('aub-concept-priorities')
-      return stored ? JSON.parse(stored) as string[] : ['Clear monthly cost', 'Virginia branch access']
-    } catch {
-      return ['Clear monthly cost', 'Virginia branch access']
-    }
-  })
+  const [memory, setMemory] = useState(loadCustomerMemory)
+  const [cue, setCue] = useState<AgentCue | null>(null)
   const answerRef = useRef<HTMLElement>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
   const modalRef = useRef<HTMLElement>(null)
   const returnFocusRef = useRef<HTMLElement | null>(null)
+  const memoryButtonRef = useRef<HTMLButtonElement>(null)
+  const cueTimerRef = useRef<number | null>(null)
 
   const currentAnswer = answers[answerKey]
-  const contextSummary = useMemo(() => priorities.length ? priorities.join(' · ') : 'No saved priorities in use', [priorities])
+  const contextSummary = useMemo(() => memory.enabled && memory.priorities.length ? memory.priorities.join(' · ') : 'Saved memory is not in use', [memory])
+  const firstName = memory.customerName.trim().split(/\s+/)[0] || 'this customer'
+  const closeMemory = useCallback(() => setMemoryOpen(false), [])
 
   useEffect(() => {
-    localStorage.setItem('aub-concept-priorities', JSON.stringify(priorities))
-  }, [priorities])
+    saveCustomerMemory(memory)
+  }, [memory])
+
+  useEffect(() => () => {
+    if (cueTimerRef.current) window.clearTimeout(cueTimerRef.current)
+  }, [])
 
   useEffect(() => {
     if (!modal) return
@@ -213,8 +218,24 @@ function App() {
     setModal(kind)
   }
 
-  const togglePriority = (priority: string) => {
-    setPriorities((current) => current.includes(priority) ? current.filter((item) => item !== priority) : [...current, priority])
+  const showCue = (text: string, event?: MouseEvent<HTMLElement>) => {
+    if (cueTimerRef.current) window.clearTimeout(cueTimerRef.current)
+    let anchor: AgentCue['anchor']
+    if (event?.detail === 0) {
+      const rect = event.currentTarget.getBoundingClientRect()
+      anchor = { x: Math.min(rect.right + 16, window.innerWidth - 330), y: Math.min(rect.top + rect.height / 2, window.innerHeight - 150) }
+    }
+    setCue({ id: Date.now(), text, anchor })
+    cueTimerRef.current = window.setTimeout(() => setCue(null), 4000)
+  }
+
+  const productCue = (name: string, genericCue: string) => {
+    if (!memory.enabled) return genericCue
+    if (name === 'Checking') return `${firstName}'s preference for clear monthly costs makes ongoing requirements more important than the bonus.`
+    if (name === 'Money Market') return `${firstName}'s goal calls for access to part of the reserve, so flexibility belongs in the comparison.`
+    if (name === 'CDs') return `${firstName}'s 12-month goal makes the term relevant—only for money that can stay put.`
+    if (name === 'Home Loans') return 'Memory can prepare questions, but it is blocked from predicting eligibility or pricing.'
+    return genericCue
   }
 
   return (
@@ -238,6 +259,7 @@ function App() {
         </nav>
         <div className="header-actions">
           <a className="routing" href="#contact">Routing #: 051403164</a>
+          <button ref={memoryButtonRef} className={memory.enabled ? 'memory-button memory-button--on' : 'memory-button'} onClick={() => setMemoryOpen(true)} aria-haspopup="dialog" aria-label={`Memory ${memory.enabled ? 'on' : 'off'}`}><Brain size={17} /><span>Memory {memory.enabled ? 'on' : 'off'}</span></button>
           <button className="header-icon" aria-label="Search this concept" onClick={() => document.getElementById('guide-input')?.focus()}><Search size={18} /></button>
           <button className="login-button" onClick={(event) => openModal('login', event.currentTarget)}><UserRound size={17} /> Login</button>
           <button className="menu-button" aria-label="Toggle navigation" aria-expanded={menuOpen} onClick={() => setMenuOpen((open) => !open)}>{menuOpen ? <X /> : <Menu />}</button>
@@ -252,13 +274,13 @@ function App() {
             <span className="eyebrow eyebrow--light">Better banking, made personal</span>
             <h1 id="hero-title">Earn up to an <em>$800 cash bonus*</em></h1>
             <p>Open a new personal checking account and you could be eligible when you meet qualifying activities.</p>
-            <a className="primary-button primary-button--light" href="#compare">Explore the offer <ArrowRight size={18} /></a>
+            <a className="primary-button primary-button--light" href="#compare" onClick={(event) => showCue('I can explain the offer, but I will keep ongoing fees and requirements visible.', event)}>Explore the offer <ArrowRight size={18} /></a>
           </motion.div>
 
           <motion.div className="guide" initial={{ opacity: 0, y: 35 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.55 }}>
             <div className="guide-heading">
               <span><Sparkles size={17} /> AUB Guide</span>
-              <button className="context-button" onClick={() => setContextOpen((open) => !open)} aria-expanded={contextOpen}><Eye size={15} /> What I’m using <ChevronDown size={14} /></button>
+              <button className="context-button" onClick={() => setMemoryOpen(true)} aria-haspopup="dialog"><Brain size={15} /> What I remember</button>
             </div>
             <h2>What can we help you with today?</h2>
             <p className="guide-intro">Ask in your own words. The guide will explain options and show its reasoning; you decide what happens next.</p>
@@ -270,17 +292,7 @@ function App() {
             <div className="prompt-row" aria-label="Suggested questions">
               {promptMap.map((prompt) => <button key={prompt.key} onClick={() => revealAnswer(prompt.key)}>{prompt.label}</button>)}
             </div>
-            <AnimatePresence>
-              {contextOpen && (
-                <motion.div className="context-panel" initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}>
-                  <div><span>Browser-local planning context</span><strong>{contextSummary}</strong></div>
-                  {['Clear monthly cost', 'Virginia branch access', 'Predictable growth'].map((priority) => (
-                    <label key={priority}><input type="checkbox" checked={priorities.includes(priority)} onChange={() => togglePriority(priority)} /> {priority}</label>
-                  ))}
-                  <p>Visible, editable, and stored only in this browser for the demo.</p>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            <button className="memory-disclosure" onClick={() => setMemoryOpen(true)}><span className={memory.enabled ? 'memory-dot memory-dot--on' : 'memory-dot'} />{memory.enabled ? `Using fictional profile for ${firstName}` : 'Customer memory is paused'}<span>Inspect or edit</span></button>
           </motion.div>
         </section>
 
@@ -309,7 +321,7 @@ function App() {
               const Icon = product.icon
               const selected = selectedProduct === product.name
               return (
-                <motion.button key={product.name} className={selected ? 'product-row product-row--selected' : 'product-row'} onClick={() => setSelectedProduct(selected ? null : product.name)} aria-pressed={selected} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: (index % 3) * 0.05 }}>
+                <motion.button key={product.name} className={selected ? 'product-row product-row--selected' : 'product-row'} onClick={(event) => { setSelectedProduct(selected ? null : product.name); showCue(productCue(product.name, product.cue), event) }} aria-pressed={selected} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: (index % 3) * 0.05 }}>
                   <span className="product-index">0{index + 1}</span>
                   <Icon className="product-icon" />
                   <span className="product-name"><strong>{product.name}</strong><small>{product.copy}</small></span>
@@ -331,7 +343,7 @@ function App() {
                 <h3>{path.title}</h3>
                 <p>{path.detail}</p>
                 <div><strong>Keep in view</strong><span>{path.tradeoff}</span></div>
-                <button onClick={() => setSelectedProduct(path.title)}>{selectedProduct === path.title ? <><Check /> Selected to discuss</> : <>Choose this direction <ArrowRight /></>}</button>
+                <button onClick={(event) => { setSelectedProduct(path.title); showCue(memory.enabled ? `I’ll remember this direction for ${firstName}, while keeping the tradeoff visible.` : path.tradeoff, event) }}>{selectedProduct === path.title ? <><Check /> Selected to discuss</> : <>Choose this direction <ArrowRight /></>}</button>
               </article>
             ))}
           </div>
@@ -351,15 +363,15 @@ function App() {
         <section className="insights" id="insights" aria-labelledby="insights-title">
           <div className="section-heading"><div><span className="eyebrow">Featured educational articles</span><h2 id="insights-title">Learn before you act.</h2></div><p>The guide can point to relevant education, but the source stays visible.</p></div>
           <div className="article-list">
-            <a href="#insights"><span>Your security · 08.24.2026</span><strong>Protecting Your Financial Life in a Digital World</strong><ArrowRight /></a>
-            <a href="#insights"><span>Your life · 08.10.2026</span><strong>Types of Mortgages</strong><ArrowRight /></a>
-            <a href="#insights"><span>Your business · Your security · 08.03.2026</span><strong>Protecting Your Business from Wire and Payment Fraud</strong><ArrowRight /></a>
+            <a href="#insights" onClick={(event) => showCue('This is educational context. I won’t treat reading it as a financial decision.', event)}><span>Your security · 08.24.2026</span><strong>Protecting Your Financial Life in a Digital World</strong><ArrowRight /></a>
+            <a href="#insights" onClick={(event) => showCue('I can connect education to a goal without inferring intent or eligibility.', event)}><span>Your life · 08.10.2026</span><strong>Types of Mortgages</strong><ArrowRight /></a>
+            <a href="#insights" onClick={(event) => showCue('Security guidance stays general; this demo never sees accounts or transactions.', event)}><span>Your business · Your security · 08.03.2026</span><strong>Protecting Your Business from Wire and Payment Fraud</strong><ArrowRight /></a>
           </div>
         </section>
 
         <section className="appointment" id="appointment">
           <div><CalendarDays /><span className="eyebrow">Schedule an appointment</span><h2>You can even open an account by video.</h2><p>The guide can prepare your questions; a banker handles the real conversation and any application.</p></div>
-          <button className="primary-button" onClick={(event) => openModal('appointment', event.currentTarget)}>Prepare my appointment <ArrowRight /></button>
+          <button className="primary-button" onClick={(event) => { showCue(`I can carry ${memory.enabled ? `${firstName}'s stated goal` : 'your stated goal'} into a question list—not into an application.`, event); openModal('appointment', event.currentTarget) }}>Prepare my appointment <ArrowRight /></button>
         </section>
       </main>
 
@@ -394,6 +406,8 @@ function App() {
           </div>
         )}
       </AnimatePresence>
+      <MemoryPanel open={memoryOpen} memory={memory} onClose={closeMemory} onChange={setMemory} onClear={() => setMemory(clearCustomerMemory())} onRestore={() => setMemory(restoreCustomerMemory())} returnFocusRef={memoryButtonRef} />
+      <AmbientGuide cue={cue} />
     </div>
   )
 }
