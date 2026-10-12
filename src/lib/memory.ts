@@ -45,17 +45,13 @@ export const saveCustomerMemory = (memory: CustomerMemory): void => {
   }
 }
 
-export const clearCustomerMemory = (): { memory: CustomerMemory; persistence: 'removed' | 'reset' | 'unavailable' } => {
+export const clearCustomerMemory = (): { memory: CustomerMemory; persistence: 'stored' | 'unavailable' } => {
   const memory = { ...restoreCustomerMemory(), enabled: false, acknowledged: true, customerName: '', relationshipSince: '', region: '', goal: '', preferredChannel: '', priorities: [] }
   try {
-    localStorage.removeItem(MEMORY_KEY)
-    return { memory, persistence: 'removed' }
+    // Keep an empty, disabled record so an explicit clear is not mistaken for first use after reload.
+    localStorage.setItem(MEMORY_KEY, JSON.stringify(memory))
+    return { memory, persistence: 'stored' }
   } catch {
-    try {
-      localStorage.setItem(MEMORY_KEY, JSON.stringify(memory))
-      return { memory, persistence: 'reset' }
-    } catch {
-      return { memory, persistence: 'unavailable' }
-    }
+    return { memory, persistence: 'unavailable' }
   }
 }

@@ -68,7 +68,7 @@ export function MemoryPanel({ open, memory, onClose, onChange, onClear, onRestor
               <button ref={closeRef} className="memory-close" onClick={onClose} aria-label="Close customer memory"><X /></button>
             </div>
             <p className="memory-intro"><strong>Fictional demo profile.</strong> Stored only in this browser. Nothing is sent to the bank or a model.</p>
-            {clearWarning && <p className="memory-clear-warning" role="alert">The guide has cleared this profile from the current screen, but this browser could not remove the saved data. It may remain in this browser.</p>}
+            {clearWarning && <p className="memory-clear-warning" role="alert">The guide has cleared this profile from the current screen, but this browser could not save the cleared state. The demo profile may return after reload.</p>}
 
             <label className="memory-switch">
               <span><strong>Use this memory</strong><small>Personalize explanations, never decisions.</small></span>

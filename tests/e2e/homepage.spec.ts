@@ -62,6 +62,11 @@ test('customer can edit, pause, clear, and restore browser-local memory', async 
   await page.getByRole('checkbox', { name: /Use this memory/i }).uncheck()
   await page.getByRole('button', { name: /Clear everything/i }).click()
   await expect(page.getByRole('textbox', { name: /Preferred name/i })).toHaveValue('')
+  await page.reload()
+  await expect(page.getByRole('button', { name: /Memory off/i })).toBeVisible()
+  await page.getByRole('button', { name: /Memory off/i }).click()
+  await expect(page.getByRole('textbox', { name: /Preferred name/i })).toHaveValue('')
+  await expect(page.getByRole('checkbox', { name: /Use this memory/i })).not.toBeChecked()
   await page.getByRole('button', { name: /Restore demo profile/i }).click()
   await expect(page.getByRole('textbox', { name: /Preferred name/i })).toHaveValue('Maya Carter')
 })
@@ -133,6 +138,23 @@ test('clear everything resets the visible profile when browser storage is denied
 
   await expect(page.getByRole('textbox', { name: /Preferred name/i })).toHaveValue('')
   await expect(page.getByRole('checkbox', { name: /Use this memory/i })).not.toBeChecked()
-  await expect(page.getByRole('alert')).toContainText(/could not remove the saved data/i)
+  await expect(page.getByRole('alert')).toContainText(/could not save the cleared state/i)
   expect(pageErrors).toEqual([])
+})
+
+test('checking answer evidence only cites an active saved cost priority', async ({ page }) => {
+  await page.goto('/')
+  const evidence = page.locator('details.evidence')
+  await evidence.locator('summary').click()
+  await expect(evidence).toContainText('Your saved priority: keep monthly costs easy to understand')
+
+  await page.getByRole('button', { name: /Memory on/i }).click()
+  await page.getByRole('checkbox', { name: /Clear monthly cost/i }).uncheck()
+  await page.getByRole('button', { name: /Close customer memory/i }).click()
+  await expect(evidence).not.toContainText(/saved priority/i)
+
+  await page.getByRole('button', { name: /Memory on/i }).click()
+  await page.getByRole('checkbox', { name: /Use this memory/i }).uncheck()
+  await page.getByRole('button', { name: /Close customer memory/i }).click()
+  await expect(evidence).not.toContainText(/saved priority/i)
 })

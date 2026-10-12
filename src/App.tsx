@@ -49,7 +49,7 @@ const answers: Record<GoalKey, GuideAnswer> = {
     eyebrow: 'A useful starting point',
     title: 'Start with checking, then compare the conditions that change the value.',
     body: 'The current offer advertises up to an $800 cash bonus when qualifying activities are met. A bonus should not replace checking fees, access, and ongoing fit in the decision.',
-    evidence: ['Current homepage cash-bonus language', 'Your saved priority: keep monthly costs easy to understand'],
+    evidence: ['Current homepage cash-bonus language'],
     action: 'Compare three directions',
     target: '#compare',
   },
@@ -168,6 +168,12 @@ function App() {
   const skipNextMemorySaveRef = useRef(false)
 
   const currentAnswer = answers[answerKey]
+  const currentEvidence = [
+    ...currentAnswer.evidence,
+    ...(answerKey === 'checking' && memory.enabled && memory.priorities.includes('Clear monthly cost')
+      ? ['Your saved priority: keep monthly costs easy to understand']
+      : []),
+  ]
   const contextSummary = useMemo(() => memory.enabled && memory.priorities.length ? memory.priorities.join(' · ') : 'Saved memory is not in use', [memory])
   const firstName = memory.customerName.trim().split(/\s+/)[0] || 'this customer'
   const closeMemory = useCallback(() => setMemoryOpen(false), [])
@@ -325,7 +331,7 @@ function App() {
           </div>
           <details className="evidence">
             <summary>Why this answer</summary>
-            <ul>{currentAnswer.evidence.map((item) => <li key={item}><Check size={15} /> {item}</li>)}</ul>
+            <ul>{currentEvidence.map((item) => <li key={item}><Check size={15} /> {item}</li>)}</ul>
             <p>Guidance is illustrative, not financial advice or an eligibility decision.</p>
           </details>
         </motion.section>
