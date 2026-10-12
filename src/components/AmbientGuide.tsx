@@ -39,9 +39,9 @@ export function AmbientGuide({ cue }: AmbientGuideProps) {
           style={{ x, y }}
           role="status"
           aria-live="polite"
-          initial={{ opacity: 0, scale: 0.96, y: 6 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.98, y: -4 }}
+          initial={{ opacity: 0, scale: 0.96 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.98 }}
           transition={{ duration: reducedMotion ? 0.01 : 0.2 }}
         >
           <span className="guide-orb"><Sparkles size={13} /></span>

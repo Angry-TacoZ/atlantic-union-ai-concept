@@ -208,6 +208,7 @@ footer a, footer p { color: rgba(255,255,255,.65); font-size: .82rem; line-heigh
 .secondary-button, .danger-button { min-height: 44px; padding: 0 14px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-weight: 800; }
 .secondary-button { border: 1px solid var(--line); background: transparent; }
 .danger-button { border: 0; background: transparent; color: #98362f; }
+.memory-clear-warning { padding: 12px 14px; border-left: 3px solid #98362f; background: #fff1ef; color: #702821; font-size: .82rem; line-height: 1.45; }
 
 @keyframes imageSettle { from { transform: scale(1.08); } to { transform: scale(1.03); } }
 

@@ -45,7 +45,17 @@ export const saveCustomerMemory = (memory: CustomerMemory): void => {
   }
 }
 
-export const clearCustomerMemory = (): CustomerMemory => {
-  localStorage.removeItem(MEMORY_KEY)
-  return { ...restoreCustomerMemory(), enabled: false, acknowledged: true, customerName: '', relationshipSince: '', region: '', goal: '', preferredChannel: '', priorities: [] }
+export const clearCustomerMemory = (): { memory: CustomerMemory; persistence: 'removed' | 'reset' | 'unavailable' } => {
+  const memory = { ...restoreCustomerMemory(), enabled: false, acknowledged: true, customerName: '', relationshipSince: '', region: '', goal: '', preferredChannel: '', priorities: [] }
+  try {
+    localStorage.removeItem(MEMORY_KEY)
+    return { memory, persistence: 'removed' }
+  } catch {
+    try {
+      localStorage.setItem(MEMORY_KEY, JSON.stringify(memory))
+      return { memory, persistence: 'reset' }
+    } catch {
+      return { memory, persistence: 'unavailable' }
+    }
+  }
 }

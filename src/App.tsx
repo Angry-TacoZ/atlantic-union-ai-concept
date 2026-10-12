@@ -154,6 +154,7 @@ function App() {
   const [query, setQuery] = useState('')
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null)
   const [memoryOpen, setMemoryOpen] = useState(false)
+  const [memoryClearWarning, setMemoryClearWarning] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [modal, setModal] = useState<'login' | 'appointment' | null>(null)
   const [memory, setMemory] = useState(loadCustomerMemory)
@@ -164,6 +165,7 @@ function App() {
   const returnFocusRef = useRef<HTMLElement | null>(null)
   const memoryButtonRef = useRef<HTMLButtonElement>(null)
   const cueTimerRef = useRef<number | null>(null)
+  const skipNextMemorySaveRef = useRef(false)
 
   const currentAnswer = answers[answerKey]
   const contextSummary = useMemo(() => memory.enabled && memory.priorities.length ? memory.priorities.join(' · ') : 'Saved memory is not in use', [memory])
@@ -171,6 +173,10 @@ function App() {
   const closeMemory = useCallback(() => setMemoryOpen(false), [])
 
   useEffect(() => {
+    if (skipNextMemorySaveRef.current) {
+      skipNextMemorySaveRef.current = false
+      return
+    }
     saveCustomerMemory(memory)
   }, [memory])
 
@@ -231,11 +237,24 @@ function App() {
 
   const productCue = (name: string, genericCue: string) => {
     if (!memory.enabled) return genericCue
-    if (name === 'Checking') return `${firstName}'s preference for clear monthly costs makes ongoing requirements more important than the bonus.`
-    if (name === 'Money Market') return `${firstName}'s goal calls for access to part of the reserve, so flexibility belongs in the comparison.`
-    if (name === 'CDs') return `${firstName}'s 12-month goal makes the term relevant—only for money that can stay put.`
+    const namePrefix = memory.customerName.trim() ? `${firstName}'s` : 'Your'
+    if (name === 'Checking' && memory.priorities.includes('Clear monthly cost')) return `${namePrefix} preference for clear monthly costs makes ongoing requirements more important than the bonus.`
+    if (name === 'Money Market' && /\b(access|accessible|liquid|withdraw)\b/i.test(memory.goal)) return `${namePrefix} stated goal mentions access, so flexibility belongs in the comparison.`
+    if (name === 'CDs' && /\b\d+\s*[- ]?\s*(?:months?|years?)\b/i.test(memory.goal)) return `${namePrefix} stated time horizon makes a fixed term relevant—only for money that can stay put.`
     if (name === 'Home Loans') return 'Memory can prepare questions, but it is blocked from predicting eligibility or pricing.'
     return genericCue
+  }
+
+  const handleClearMemory = () => {
+    const result = clearCustomerMemory()
+    skipNextMemorySaveRef.current = true
+    setMemoryClearWarning(result.persistence === 'unavailable')
+    setMemory(result.memory)
+  }
+
+  const handleRestoreMemory = () => {
+    setMemoryClearWarning(false)
+    setMemory(restoreCustomerMemory())
   }
 
   return (
@@ -406,7 +425,7 @@ function App() {
           </div>
         )}
       </AnimatePresence>
-      <MemoryPanel open={memoryOpen} memory={memory} onClose={closeMemory} onChange={setMemory} onClear={() => setMemory(clearCustomerMemory())} onRestore={() => setMemory(restoreCustomerMemory())} returnFocusRef={memoryButtonRef} />
+      <MemoryPanel open={memoryOpen} memory={memory} onClose={closeMemory} onChange={setMemory} onClear={handleClearMemory} onRestore={handleRestoreMemory} clearWarning={memoryClearWarning} returnFocusRef={memoryButtonRef} />
       <AmbientGuide cue={cue} />
     </div>
   )

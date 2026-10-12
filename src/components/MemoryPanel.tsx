@@ -11,12 +11,13 @@ interface MemoryPanelProps {
   onChange: (memory: CustomerMemory) => void
   onClear: () => void
   onRestore: () => void
+  clearWarning: boolean
   returnFocusRef: React.RefObject<HTMLButtonElement | null>
 }
 
 const editablePriorities = ['Clear monthly cost', 'Virginia branch access', 'Predictable growth', 'Easy digital access']
 
-export function MemoryPanel({ open, memory, onClose, onChange, onClear, onRestore, returnFocusRef }: MemoryPanelProps) {
+export function MemoryPanel({ open, memory, onClose, onChange, onClear, onRestore, clearWarning, returnFocusRef }: MemoryPanelProps) {
   const panelRef = useRef<HTMLElement>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
   const reducedMotion = useReducedMotion()
@@ -67,6 +68,7 @@ export function MemoryPanel({ open, memory, onClose, onChange, onClear, onRestor
               <button ref={closeRef} className="memory-close" onClick={onClose} aria-label="Close customer memory"><X /></button>
             </div>
             <p className="memory-intro"><strong>Fictional demo profile.</strong> Stored only in this browser. Nothing is sent to the bank or a model.</p>
+            {clearWarning && <p className="memory-clear-warning" role="alert">The guide has cleared this profile from the current screen, but this browser could not remove the saved data. It may remain in this browser.</p>}
 
             <label className="memory-switch">
               <span><strong>Use this memory</strong><small>Personalize explanations, never decisions.</small></span>
