@@ -12,12 +12,15 @@ The current homepage already asks, “What can we help you with today?” This c
 
 - customers can ask in their own words or use recognizable shortcuts;
 - guidance appears inline instead of inside a corner chatbot;
+- a small cursor-bound guide comments only after intentional clicks, then fades out;
 - every answer can expose the copy and saved priorities it used;
-- browser-local planning context is visible, editable, and optional;
+- a fictional customer profile demonstrates persistent browser-local memory across visits;
+- customers can inspect, edit, pause, clear, or restore everything the guide remembers;
+- visible purpose, provenance, retention, and hard risk controls govern how memory may be used;
 - comparisons preserve tradeoffs instead of claiming a universal best product;
 - login, account access, scheduling, applications, and financial actions remain clearly outside the simulation.
 
-All guide responses are deterministic browser-side rules. No model, analytics, account system, or third-party service is called.
+All guide responses are deterministic browser-side rules. The mock profile is versioned and validated before use, and malformed saved state falls back to the fictional default. No model, analytics, account system, or third-party service is called.
 
 ## Run locally
 
@@ -37,4 +40,4 @@ Pull requests run the same verification and browser suite in GitHub Actions. Pus
 
 ## Declared operating scope
 
-Public, low-risk static demonstration. It uses fictional browser-local planning priorities and collects no account credentials, application data, personal financial information, payments, or appointments. A production banking implementation would require authenticated systems, regulated-data handling, security and privacy review, model governance, accessibility testing with customers, evidence provenance, monitoring, and human escalation paths.
+Public, low-risk static demonstration. It uses a clearly labeled fictional customer profile stored only in the current browser and collects no account credentials, application data, personal financial information, payments, or appointments. The memory may personalize explanations; explicit controls block its use for credit, eligibility, pricing, fraud, or transactional decisions. A production banking implementation would require authenticated systems, regulated-data handling, security and privacy review, model governance, accessibility testing with customers, evidence provenance, monitoring, and human escalation paths.
