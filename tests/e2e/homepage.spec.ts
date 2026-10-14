@@ -158,3 +158,18 @@ test('checking answer evidence only cites an active saved cost priority', async 
   await page.getByRole('button', { name: /Close customer memory/i }).click()
   await expect(evidence).not.toContainText(/saved priority/i)
 })
+
+test('comparison selection is described as session-only, not saved memory', async ({ page }) => {
+  await page.goto('/')
+  const choose = page.getByRole('button', { name: /Choose this direction/i }).first()
+  await choose.scrollIntoViewIfNeeded()
+  await choose.click()
+
+  await expect(page.getByRole('button', { name: /Selected to discuss/i }).first()).toBeVisible()
+  const status = page.getByRole('status').last()
+  await expect(status).toContainText(/selected for this visit/i)
+  await expect(status).not.toContainText(/remember|memory/i)
+
+  await page.reload()
+  await expect(page.getByRole('button', { name: /Choose this direction/i }).first()).toBeVisible()
+})

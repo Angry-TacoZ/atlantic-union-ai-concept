@@ -368,7 +368,7 @@ function App() {
                 <h3>{path.title}</h3>
                 <p>{path.detail}</p>
                 <div><strong>Keep in view</strong><span>{path.tradeoff}</span></div>
-                <button onClick={(event) => { setSelectedProduct(path.title); showCue(memory.enabled ? `I’ll remember this direction for ${firstName}, while keeping the tradeoff visible.` : path.tradeoff, event) }}>{selectedProduct === path.title ? <><Check /> Selected to discuss</> : <>Choose this direction <ArrowRight /></>}</button>
+                <button onClick={(event) => { setSelectedProduct(path.title); showCue(`${path.title} is selected for this visit; the tradeoff stays visible while you compare.`, event) }}>{selectedProduct === path.title ? <><Check /> Selected to discuss</> : <>Choose this direction <ArrowRight /></>}</button>
               </article>
             ))}
           </div>
